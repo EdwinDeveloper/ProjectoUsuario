@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-nodejs-container
+    networks:
+      - mynetwork
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: messaging_2
+      MYSQL_USER: root_test
+      MYSQL_PASSWORD: root_test
+    ports:
+      - "3306:3306"
+
+networks:
+  mynetwork:
+    driver: bridge
