@@ -1,8 +1,9 @@
-const { Sequelize } = require('sequelize');
-const User = require('../models/User');
+const { Sequelize } = require('sequelize')
+const User = require('../models/User')
+const Post = require('../models/Post')
 
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 // Create a Sequelize instance
 const sequelize = new Sequelize(
@@ -25,18 +26,20 @@ const sequelize = new Sequelize(
 )
 
 // Define the User model
-const UserModel = User(sequelize, Sequelize.DataTypes);
+const UserModel = User(sequelize, Sequelize.DataTypes)
+const PostModel = Post(sequelize, Sequelize.DataTypes)
 
 // Synchronize the model with the database
-// sequelize.sync()
-//   .then(() => {
-//     console.log('Models synchronized with the database.');
-//   })
-//   .catch((error) => {
-//     console.error('Error synchronizing models with the database:', error);
-//   });
+sequelize.sync()
+  .then(() => {
+    console.log('Models synchronized with the database.');
+  })
+  .catch((error) => {
+    console.error('Error synchronizing models with the database:', error);
+  });
 
 module.exports = {
   sequelize,
   UserModel,
+  PostModel
 };
