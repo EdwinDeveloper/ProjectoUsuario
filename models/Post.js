@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       posted_by: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       createdAt: {
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Post.associate = (models) => {
-      Post.belongsTo(models.User, { foreignKey: 'userId' })
+      Post.belongsTo(models.User, { foreignKey: 'posted_by', as: 'user' });
     }
   
     return Post;

@@ -1,28 +1,64 @@
 const UserModel = require('../config/sequelize').UserModel
-const sequelize = require ('../config/sequelize').sequelize
+const PostModel = require('../config/sequelize').PostModel
 
 async function getAllUsers() {
-    try {
-      //await sequelize.authenticate()
-      const users = await UserModel.findAll()
-  
-      return users
-    } catch (error) {
-      return null
-    } finally {
-      //await sequelize.close();
-    }
+  const users = await UserModel.findAll()
+  return users
 }
 
-async function createUser() {
+async function getOneUser(id) {
+  const user = await UserModel.findByPk(id)
+  return user
+}
+
+async function getOneUserByEmail(email) {
+  const user = await UserModel.findOne({
+    where: {
+      email: email,
+    },
+  })
+  return user
+}
+
+async function updateUser(id, updatedValues){
+  const user = await UserModel.update(updatedValues, {
+    where: { id: id },
+    returning: true,
+  })
+  return user
+}
+
+async function deleteUser(id) {
+    //await sequelize.authenticate()
+    const deleteResponse = await UserModel.destroy({
+      where: {
+        id: id,
+      },
+    }).then((deletedRows) => {
+      if (deletedRows > 0) {
+        return `User with id ${id} deleted successfully.`
+      } else {
+        return `User with id ${id} not found.`
+      }
+    })
+    .catch((error) => {
+      return 'Error deleting user: ' + error
+    })
+    return deleteResponse
+}
+
+async function createUser(
+  userFirstName, userLastname, email, password
+) {
     try {
 
       //await sequelize.authenticate();
 
       const newUser = await UserModel.create({
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        password: 'password123',
+        user_first_name: userFirstName,
+        user_last_name: userLastname,
+        email: email,
+        password: password,
         updatedAt: new Date(),
       })
       return newUser
@@ -35,5 +71,9 @@ async function createUser() {
 
 module.exports = {
   getAllUsers,
-  createUser
+  createUser,
+  deleteUser,
+  getOneUser,
+  updateUser,
+  getOneUserByEmail
 }
